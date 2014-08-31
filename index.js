@@ -1,4 +1,4 @@
-var through = require('through2');
+var through = require('through');
 var gutil = require('gulp-util');
 var PluginError = gutil.PluginError;
 var path = require('path');
@@ -8,10 +8,9 @@ module.exports = function (fileName, options) {
     var firstFile = null;
     var pack = bempack(options);
 
-    function apply(obj, enc, cb) {
+    function apply(obj) {
         if (!firstFile) { firstFile = obj; }
         pack.add(obj.path);
-        cb(null);
     }
 
     function compile() {
@@ -27,7 +26,7 @@ module.exports = function (fileName, options) {
         }.bind(this));
     }
 
-    var rs = through.obj(apply, compile);
+    var rs = through(apply, compile);
 
     return rs;
 };
